@@ -12,7 +12,7 @@ class App extends Component {
             Colin a 6 doigts de pieds
           </p>
 	  <p>
-            wallah
+            ou 12
           </p>
         </header>
       </div>
