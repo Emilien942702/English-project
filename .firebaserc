@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "test-anglais-6c622"
+    "default": "test-anglais-6c622",
+    "test-anglais-6c622": "test-anglais-6c622"
   }
 }
