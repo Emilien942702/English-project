@@ -9,7 +9,6 @@ branches:
     - master
 
 script:
-  - sonar-scanner
   - npm run build
   - npm install -g firebase-tools
 
