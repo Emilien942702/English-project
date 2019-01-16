@@ -6,6 +6,8 @@ import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 const SignInPage = () => (
   <div>
@@ -15,25 +17,20 @@ const SignInPage = () => (
     <SignUpLink />
   </div>
 );
-
 const INITIAL_STATE = {
   email: '',
   password: '',
   error: null,
 };
-
 class SignInFormBase extends Component {
   constructor(props) {
     super(props);
-
-    this.state = { ...INITIAL_STATE };
+	this.state = { ...INITIAL_STATE };
   }
-
-  onSubmit = event => {
-    const { email, password } = this.state;
-
+   onSubmit = e => {
+    e.preventDefault();
     this.props.firebase
-      .doSignInWithEmailAndPassword(email, password)
+      .doSignInWithEmailAndPassword(this.state.email, this.state.password)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
@@ -41,41 +38,39 @@ class SignInFormBase extends Component {
       .catch(error => {
         this.setState({ error });
       });
-
-    event.preventDefault();
-  };
-
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
+	};
+	
+	handleOnChange = event => {
+		this.setState({ [event.target.type]: event.target.value });
+	};
 
   render() {
-    const { email, password, error } = this.state;
-
-    const isInvalid = password === '' || email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="email"
-          value={email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
+      <form
+        style={style.container}
+        onSubmit={event => this.onSubmit(event)}
+      >
+        <h3>Login</h3>
+        <TextField
+		type="email"
+          placeholder="Enter your Email"
+		  value={this.state.textFieldValue}
+          onChange={this.handleOnChange}
         />
-        <input
-          name="password"
-          value={password}
-          onChange={this.onChange}
+        <br />
+        <TextField
           type="password"
-          placeholder="Password"
+          placeholder="Enter your Password"
+		  value={this.state.textFieldValue}
+          onChange={this.handleOnChange}
         />
-        <button disabled={isInvalid} type="submit">
-          Sign In
-        </button>
-
-        {error && <p>{error.message}</p>}
-      </form>
+        <br />
+        <Button variant="contained"
+          style={style.raisedBtn}
+          type="submit"
+        >Login</Button>
+</form>
     );
   }
 }
@@ -84,6 +79,19 @@ const SignInForm = compose(
   withRouter,
   withFirebase,
 )(SignInFormBase);
+
+const raisedBtn = {
+  margin: 15
+};
+
+const container = {
+  textAlign: 'center'
+};
+
+const style = {
+  raisedBtn,
+  container
+};
 
 export default SignInPage;
 
