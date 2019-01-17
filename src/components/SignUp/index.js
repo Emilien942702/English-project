@@ -37,6 +37,7 @@ class SignUpFormBase extends Component {
   }
    onSubmit = e => {
     const { username, email, passwordOne } = this.state;
+	const admin = false;
     e.preventDefault();
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
@@ -47,6 +48,7 @@ class SignUpFormBase extends Component {
           .set({
            username,
            email,
+		   admin,
           })
           .then(() => {
             this.setState({ ...INITIAL_STATE });
@@ -68,6 +70,18 @@ class SignUpFormBase extends Component {
   render() {
 	  
       const { classes } = this.props
+	      const {
+      username,
+      email,
+      passwordOne,
+      passwordTwo,
+      error,
+    } = this.state;
+	 const isInvalid =
+      passwordOne !== passwordTwo ||
+      passwordOne === '' ||
+      email === '' ||
+      username === '';
     return (
 	
 <main className={classes.main}>
@@ -82,21 +96,22 @@ class SignUpFormBase extends Component {
         <form className={classes.form} onSubmit={event => this.onSubmit(event)}>
 		<FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="username">Username</InputLabel>
-            <Input id="username" onChange={this.onChange} name="username" autoComplete="username" autoFocus value={this.state.InputValue} />
+            <Input id="username" onChange={this.onChange} name="username" autoComplete="username" autoFocus value={username} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" onChange={this.onChange} name="email" autoComplete="email" value={this.state.InputValue} />
+            <Input id="email" onChange={this.onChange} name="email" autoComplete="email" value={email} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="passwordOne">Password</InputLabel>
-            <Input name="passwordOne" onChange={this.onChange} type="password" id="passwordOne" autoComplete="current-password" value={this.state.InputValue} />
+            <Input name="passwordOne" onChange={this.onChange} type="password" id="passwordOne" autoComplete="current-password" value={passwordOne} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="passwordTwo">Confirm Password</InputLabel>
-            <Input name="passwordTwo" onChange={this.onChange} type="password" id="passwordTwo" autoComplete="current-password" value={this.state.InputValue} />
+            <Input name="passwordTwo" onChange={this.onChange} type="password" id="passwordTwo" autoComplete="current-password" value={passwordTwo} />
           </FormControl>
           <Button
+			disabled={isInvalid}
             type="submit"
             fullWidth
             variant="contained"
@@ -105,6 +120,7 @@ class SignUpFormBase extends Component {
           >
             Sign up
           </Button>
+		{error && <Typography variant="h6">{error.message}</Typography>}
         </form>
 		
 </Paper>

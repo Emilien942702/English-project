@@ -36,9 +36,9 @@ class SignInFormBase extends Component {
 	this.state = { ...INITIAL_STATE };
   }
    onSubmit = e => {
-    e.preventDefault();
+    const { email,password } = this.state;
     this.props.firebase
-      .doSignInWithEmailAndPassword(this.state.email, this.state.password)
+      .doSignInWithEmailAndPassword(email, password)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
@@ -46,6 +46,7 @@ class SignInFormBase extends Component {
       .catch(error => {
         this.setState({ error });
       });
+    e.preventDefault();
 	};
 	
 	onChange = event => {
@@ -55,6 +56,8 @@ class SignInFormBase extends Component {
   render() {
 	  
       const { classes } = this.props
+	  const { email, password, error } = this.state;
+    const isInvalid = password === '' || email === '';
     return (
 	
 <main className={classes.main}>
@@ -69,13 +72,14 @@ class SignInFormBase extends Component {
         <form className={classes.form} onSubmit={event => this.onSubmit(event)}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" onChange={this.onChange} name="email" autoComplete="email" autoFocus value={this.state.InputValue} />
+            <Input id="email" onChange={this.onChange} name="email" autoComplete="email" autoFocus value={email} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
-            <Input name="password" onChange={this.onChange} type="password" id="password" autoComplete="current-password" value={this.state.InputValue} />
+            <Input name="password" onChange={this.onChange} type="password" id="password" autoComplete="current-password" value={password} />
           </FormControl>
           <Button
+			disabled={isInvalid}
             type="submit"
             fullWidth
             variant="contained"
@@ -84,6 +88,7 @@ class SignInFormBase extends Component {
           >
             Sign in
           </Button>
+		{error && <Typography variant="h6">{error.message}</Typography>}
         </form>
 		
 </Paper>

@@ -1,12 +1,19 @@
-
 import React, { Component } from 'react';
+import { compose } from 'recompose';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
-import withStyles from '@material-ui/core/styles/withStyles';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
 const PasswordForgetPage = () => (
   <div>
-    <h1>PasswordForget</h1>
     <PasswordForgetForm />
   </div>
 );
@@ -44,24 +51,40 @@ class PasswordForgetFormBase extends Component {
 
   render() {
     const { email, error } = this.state;
+      const { classes } = this.props
 
     const isInvalid = email === '';
 	
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          name="email"
-          value={this.state.email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <button disabled={isInvalid} type="submit">
-          Reset My Password
-        </button>
-
-        {error && <p>{error.message}</p>}
-      </form>
+      <main className={classes.main}>
+	<CssBaseline />
+      <Paper className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Reset password
+		</Typography>
+        <form className={classes.form} onSubmit={event => this.onSubmit(event)}>
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="email">Email Address</InputLabel>
+            <Input autoFocus id="email" onChange={this.onChange} name="email" autoComplete="email" value={email} />
+          </FormControl>
+          <Button
+			disabled={isInvalid}
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Reset password via email
+          </Button>
+		{error && <Typography variant="h6">{error.message}</Typography>}
+        </form>
+		
+</Paper>
+</main>
     );
   }
 }
@@ -80,7 +103,6 @@ class PasswordForgetLinkBase extends Component {
   
 }
 
-export default PasswordForgetPage;
 const styles = theme => ({
   main: {
     width: 'auto',
@@ -112,6 +134,10 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
   },
 });
-const PasswordForgetForm = withFirebase(PasswordForgetFormBase);
+const PasswordForgetForm = compose(
+  withFirebase,
+  withStyles(styles)
+)(PasswordForgetFormBase);
 const PasswordForgetLink = withStyles(styles)(PasswordForgetLinkBase);
+export default PasswordForgetPage;
 export { PasswordForgetForm, PasswordForgetLink };
