@@ -1,6 +1,5 @@
 import React from 'react';
 import { AuthUserContext } from '../Session';
-import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 import { withAuthorization } from '../Session';
 import Typography from '@material-ui/core/Typography';
@@ -13,7 +12,6 @@ const AccountPageBase = () => (
 		<Typography variant="h5" align="center" gutterBottom>
 			Account: {authUser.email}
 		</Typography>
-        <PasswordForgetForm />
         <PasswordChangeForm />
       </div>
     )}

@@ -8,14 +8,19 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import { AuthUserContext } from '../Session';
 import { compose } from 'recompose';
 import { withRouter } from 'react-router-dom';
+import * as ROLES from '../../constants/roles';
 
 const Navigation = () => (
   <div>
-    <AuthUserContext.Consumer>
-      {authUser =>
-        authUser ? <NavigationAuth /> : <NavigationNonAuth />
-      }
-    </AuthUserContext.Consumer>
+     <AuthUserContext.Consumer>
+    {authUser =>
+      authUser ? (
+        <NavigationAuth authUser={authUser} />
+      ) : (
+        <NavigationNonAuth />
+      )
+    }
+</AuthUserContext.Consumer>
   </div>
 );
 
@@ -60,7 +65,7 @@ class NavigationAuthBase extends React.Component {
   render() {
     const { classes } = this.props;
     const { value } = this.state;
-
+	const { authUser } = this.props;
     return (
       <BottomNavigation
         value={value}
@@ -71,20 +76,17 @@ class NavigationAuthBase extends React.Component {
         <BottomNavigationAction label="Landing" component={Link} to={ROUTES.LANDING} />
         <BottomNavigationAction label="Home" component={Link} to={ROUTES.HOME} />
         <BottomNavigationAction label="Account" component={Link} to={ROUTES.ACCOUNT} />
-			<AuthUserContext.Consumer>
-		  {authUser =>
-			authUser ? <NavigationAdmin /> : null
-		  }
-		</AuthUserContext.Consumer>
+		{authUser.roles.includes(ROLES.ADMIN) && (
+        <BottomNavigationAction label="Admin" component={Link} to={ROUTES.ADMIN} />
+		)}
+
 		<SignOutButton />
       </BottomNavigation>
 	  
     );
   }
 }
-const NavigationAdmin = () => (
-	<BottomNavigationAction label="Admin" component={Link} to={ROUTES.ADMIN} />
-);
+
 
 const styles = theme => ({
   main: {
