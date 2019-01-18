@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Button from '@material-ui/core/Button';
 
-class MessageItem extends Component {
+class MessageItemBase extends Component {
   constructor(props) {
     super(props);
 
@@ -30,6 +32,7 @@ class MessageItem extends Component {
   render() {
     const { message, onRemoveMessage } = this.props;
     const { editMode, editText } = this.state;
+      const { classes } = this.props
 
     return (
       <li>
@@ -50,24 +53,56 @@ class MessageItem extends Component {
 
         {editMode ? (
           <span>
-            <button onClick={this.onSaveEditText}>Save</button>
-            <button onClick={this.onToggleEditMode}>Reset</button>
+            <Button variant="contained" color="primary" onClick={this.onSaveEditText} className={classes.button}>Save</Button>
+            <Button variant="contained" color="primary" onClick={this.onToggleEditMode} className={classes.button}>Reset</Button>
           </span>
         ) : (
-          <button onClick={this.onToggleEditMode}>Edit</button>
+          <Button variant="contained" color="primary" onClick={this.onToggleEditMode} className={classes.button}>Edit</Button>
         )}
 
         {!editMode && (
-          <button
+          <Button
+			variant="contained" color="primary"
             type="button"
             onClick={() => onRemoveMessage(message.uid)}
-          >
+          className={classes.button}>
             Delete
-          </button>
+          </Button>
         )}
       </li>
     );
   }
 }
-
+const styles = theme => ({
+  main: {
+    width: 'auto',
+    display: 'block', // Fix IE 11 issue.
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+      width: 400,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  },
+  paper: {
+    marginTop: theme.spacing.unit * 8,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+  },
+  avatar: {
+    margin: theme.spacing.unit,
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing.unit,
+  },
+  submit: {
+    marginTop: theme.spacing.unit * 3,
+  },
+});
+const MessageItem = withStyles(styles)(MessageItemBase);
 export default MessageItem;
