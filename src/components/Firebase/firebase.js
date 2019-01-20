@@ -31,7 +31,8 @@ class Firebase {
   doSignOut = () => this.auth.signOut();
 
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
-  doUpdateEmail = email => this.auth.updateEmail(email);
+  doEmailUpdate = email => this.auth.currentUser.updateEmail(email);
+  doDeleteUser = () => this.auth.currentUser.delete();
 
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);

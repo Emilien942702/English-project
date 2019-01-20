@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import * as ROLES from '../../constants/roles';
 import * as ROUTES from '../../constants/routes';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import { withFirebase } from '../Firebase';
 
@@ -85,7 +86,7 @@ class UserItemBase extends Component {
 	  this.setState({ [event.target.name]: event.target.checked });
 	};
   render() {
-    const { user, loading, edit, username, email, admin } = this.state;
+    const { user, loading, edit, username, admin } = this.state;
       const { classes } = this.props
 
     return (
@@ -121,19 +122,16 @@ class UserItemBase extends Component {
 				onChange={this.onChange}
 				margin="normal"
 			  />
-			  <TextField
-				name="email"
-				label="Email"
-				className={classes.textField}
-				value={email}
-				onChange={this.onChange}
-				margin="normal"
-			  />
-			  <Checkbox
-			    name="admin"
-				onChange={this.onCheck}
-				checked={admin}
-				color="primary"
+			   <FormControlLabel
+				control={
+				  <Checkbox
+					name="admin"
+					onChange={this.onCheck}
+					checked={admin}
+					color="primary"
+				  />
+				}
+				label="Admin"
 			  />
 			  <Button
 				type="submit"

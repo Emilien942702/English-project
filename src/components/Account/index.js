@@ -1,6 +1,8 @@
 import React from 'react';
 import { AuthUserContext } from '../Session';
 import PasswordChangeForm from '../PasswordChange';
+import EmailChangeForm from '../EmailChange';
+import AccountDelete from '../AccountDelete';
 import { withAuthorization } from '../Session';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -13,6 +15,8 @@ const AccountPageBase = () => (
 			Account: {authUser.email}
 		</Typography>
         <PasswordChangeForm />
+        <EmailChangeForm />
+        <AccountDelete />
       </div>
     )}
   </AuthUserContext.Consumer>
