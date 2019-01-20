@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { compose } from 'recompose';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import * as ROLES from '../../constants/roles';
+import * as ROUTES from '../../constants/routes';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import { withFirebase } from '../Firebase';
 
@@ -12,6 +16,10 @@ class UserItemBase extends Component {
     this.state = {
       loading: false,
       user: null,
+	  edit: false,
+	  username: null,
+	  email: null,
+	  admin: false,
       ...props.location.state,
     };
   }
@@ -40,9 +48,44 @@ class UserItemBase extends Component {
   onSendPasswordResetEmail = () => {
     this.props.firebase.doPasswordReset(this.state.user.email);
   };
-
+  onEdit = e => {
+    const { user, username, email, admin } = this.state;
+	const roles = [];
+	if (admin) {
+      roles.push(ROLES.ADMIN);
+	}
+    e.preventDefault();
+	  this.props.firebase
+          .user(user.uid)
+          .set({
+           username,
+           email,
+		   roles,
+          })
+		  .then(() => {
+			this.props.history.push(ROUTES.ADMIN);
+          })
+          .catch(error => {
+            this.setState({ error });
+          });
+  };
+  onEditToggle = () => {
+    const { user } = this.state;
+    this.setState({
+		edit: true,
+		username: user.username,
+		email: user.email,
+		admin: user.roles===undefined ? false : true,
+	});
+  };
+  onChange = event => {
+		this.setState({ [event.target.name]: event.target.value });
+	};
+  onCheck = event => {
+	  this.setState({ [event.target.name]: event.target.checked });
+	};
   render() {
-    const { user, loading } = this.state;
+    const { user, loading, edit, username, email, admin } = this.state;
       const { classes } = this.props
 
     return (
@@ -50,7 +93,7 @@ class UserItemBase extends Component {
         <h2>User ({this.props.match.params.id})</h2>
         {loading && <div>Loading ...</div>}
 
-        {user && (
+        {user && !edit && (
           <div>
             <span>
               <strong>ID:</strong> {user.uid+" "}
@@ -64,13 +107,51 @@ class UserItemBase extends Component {
 			<span>
 			  <strong>Admin:</strong> {user.roles===undefined ? "false " : "true "}
 			</span>
+			<span><Button variant="contained" color="secondary" onClick={this.onEditToggle} className={classes.button}>Edit user</Button></span>
+		  </div>
+			)}
+		{user && edit && (
+          <div>
+            <form className={classes.form} onSubmit={event => this.onEdit(event)}>
+			<TextField
+				name="username"
+				label="Username"
+				className={classes.textField}
+				value={username}
+				onChange={this.onChange}
+				margin="normal"
+			  />
+			  <TextField
+				name="email"
+				label="Email"
+				className={classes.textField}
+				value={email}
+				onChange={this.onChange}
+				margin="normal"
+			  />
+			  <Checkbox
+			    name="admin"
+				onChange={this.onCheck}
+				checked={admin}
+				color="primary"
+			  />
+			  <Button
+				type="submit"
+				fullWidth
+				variant="contained"
+				color="primary"
+				className={classes.submit}
+			  >
+				Save
+			  </Button>
+			</form>
             <span>
 			<Button variant="contained" color="secondary" onClick={this.onSendPasswordResetEmail} className={classes.button}>
 			Reset password via email
 			</Button>
             </span>
-          </div>
-        )}
+		  </div>
+			)}
       </div>
     );
   }
@@ -99,7 +180,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '20%', // Fix IE 11 issue.
     marginTop: theme.spacing.unit,
   },
   submit: {
