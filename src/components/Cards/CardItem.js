@@ -1,53 +1,63 @@
 import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
 
-class MessageItemBase extends Component {
+class CardItemBase extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       editMode: false,
-      editText: this.props.message.text,
+      editTextRecto: this.props.card.recto,
+      editTextVerso: this.props.card.verso,
     };
   }
 
   onToggleEditMode = () => {
     this.setState(state => ({
       editMode: !state.editMode,
-      editText: this.props.message.text,
+      editTextRecto: this.props.card.recto,
+      editTextVerso: this.props.card.verso,
     }));
   };
 
   onChangeEditText = event => {
-    this.setState({ editText: event.target.value });
+    this.setState({ [event.target.id]: event.target.value });
   };
 
   onSaveEditText = () => {
-    this.props.onEditMessage(this.props.message, this.state.editText);
+    this.props.onEditCard(this.props.card, this.state.editTextRecto, this.state.editTextVerso);
 
     this.setState({ editMode: false });
   };
 
   render() {
-    const { message, onRemoveMessage } = this.props;
-    const { editMode, editText } = this.state;
+    const { card, onRemoveCard } = this.props;
+    const { editMode, editTextRecto, editTextVerso } = this.state;
       const { classes } = this.props
 
     return (
       <li>
         {editMode ? (
-          <input
-            type="text"
-            value={editText}
-            onChange={this.onChangeEditText}
-          />
+		<div>
+		<FormControl margin="normal" required fullWidth>
+				<InputLabel htmlFor="editTextRecto">Recto</InputLabel>
+				<Input type="text" id="editTextRecto" onChange={this.onChangeEditText} autoFocus value={editTextRecto} />
+		</FormControl>
+		<FormControl margin="normal" required fullWidth>
+				<InputLabel htmlFor="editTextVerso">Verso</InputLabel>
+				<Input type="text" id="editTextVerso" onChange={this.onChangeEditText} autoFocus value={editTextVerso} />
+		</FormControl>  
+		</div>
         ) : (
           <span>
             <strong>
-              {message.user.username || message.user.userId}
+              {card.user.username || card.user.userId}
             </strong>{' '}
-            {message.text} {message.editedAt && <span>(Edited)</span>}
+            {"Recto : "+card.recto} {" Verso : "+card.verso} {card.editedAt && <span>(Edited)</span>}
           </span>
         )}
 
@@ -64,7 +74,7 @@ class MessageItemBase extends Component {
           <Button
 			variant="contained" color="primary"
             type="button"
-            onClick={() => onRemoveMessage(message.uid)}
+            onClick={() => onRemoveCard(card.uid)}
           className={classes.button}>
             Delete
           </Button>
@@ -97,12 +107,12 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '20%', // Fix IE 11 issue.
     marginTop: theme.spacing.unit,
   },
   submit: {
     marginTop: theme.spacing.unit * 3,
   },
 });
-const MessageItem = withStyles(styles)(MessageItemBase);
-export default MessageItem;
+const CardItem = withStyles(styles)(CardItemBase);
+export default CardItem;

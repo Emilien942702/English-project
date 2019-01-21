@@ -65,7 +65,7 @@ class UserList extends Component {
                     state: { user },
                   }}
                 >
-                  Details
+                  Actions
                 </Link>
               </span>
             </li>

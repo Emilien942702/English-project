@@ -3,9 +3,9 @@ import { compose } from 'recompose';
 
 import { withAuthorization } from '../Session';
 import { withFirebase } from '../Firebase';
-import Messages from '../Messages';
+import Cards from '../Cards';
 
-class HomePage extends Component {
+class ListCards extends Component {
   constructor(props) {
     super(props);
 
@@ -29,10 +29,10 @@ class HomePage extends Component {
   render() {
     return (
       <div>
-        <h1>Home Page</h1>
-        <p>The Home Page is accessible by every signed in user.</p>
+        <h1>List of cards</h1>
+        <p>The list of cards is accessible by every signed in user.</p>
 
-        <Messages users={this.state.users} />
+        <Cards users={this.state.users} />
       </div>
     );
   }
@@ -43,4 +43,4 @@ const condition = authUser => !!authUser;
 export default compose(
   withFirebase,
   withAuthorization(condition),
-)(HomePage);
+)(ListCards);

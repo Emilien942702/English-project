@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { AuthUserContext } from '../Session';
 import { withFirebase } from '../Firebase';
-import MessageList from './MessageList';
+import CardList from './CardList';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
 import { compose } from 'recompose';
@@ -9,120 +9,127 @@ import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 
-class MessagesBase extends Component {
+class CardsBase extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      text: '',
+	  recto: '',
+	  verso: '',
       loading: false,
-      messages: [],
+      cards: [],
       limit: 5,
     };
   }
 
   componentDidMount() {
-    this.onListenForMessages();
+    this.onListenForCards();
   }
 
-  onListenForMessages = () => {
+  onListenForCards = () => {
     this.setState({ loading: true });
 
     this.props.firebase
-      .messages()
+      .cards()
       .orderByChild('createdAt')
       .limitToLast(this.state.limit)
       .on('value', snapshot => {
-        const messageObject = snapshot.val();
+        const cardObject = snapshot.val();
 
-        if (messageObject) {
-          const messageList = Object.keys(messageObject).map(key => ({
-            ...messageObject[key],
+        if (cardObject) {
+          const cardList = Object.keys(cardObject).map(key => ({
+            ...cardObject[key],
             uid: key,
           }));
 
           this.setState({
-            messages: messageList,
+            cards: cardList,
             loading: false,
           });
         } else {
-          this.setState({ messages: null, loading: false });
+          this.setState({ cards: null, loading: false });
         }
       });
   };
 
   componentWillUnmount() {
-    this.props.firebase.messages().off();
+    this.props.firebase.cards().off();
   }
 
   onChangeText = event => {
-    this.setState({ text: event.target.value });
+    this.setState({ [event.target.id]: event.target.value });
   };
 
-  onCreateMessage = (event, authUser) => {
-    this.props.firebase.messages().push({
-      text: this.state.text,
+  onCreateCard = (event, authUser) => {
+    this.props.firebase.cards().push({
+	  recto: this.state.recto,
+	  verso: this.state.verso,
       userId: authUser.uid,
       createdAt: this.props.firebase.serverValue.TIMESTAMP,
     });
 
-    this.setState({ text: '' });
+    this.setState({ recto: '', verso: '' });
 
     event.preventDefault();
   };
 
-  onEditMessage = (message, text) => {
-    this.props.firebase.message(message.uid).set({
-      ...message,
-      text,
+  onEditCard = (card, recto, verso) => {
+    this.props.firebase.card(card.uid).set({
+      ...card,
+	  recto,
+	  verso,
       editedAt: this.props.firebase.serverValue.TIMESTAMP,
     });
   };
 
-  onRemoveMessage = uid => {
-    this.props.firebase.message(uid).remove();
+  onRemoveCard = uid => {
+    this.props.firebase.card(uid).remove();
   };
 
   onNextPage = () => {
     this.setState(
       state => ({ limit: state.limit + 5 }),
-      this.onListenForMessages,
+      this.onListenForCards,
     );
   };
 
   render() {
     const { users } = this.props;
-    const { text, messages, loading } = this.state;
+    const { recto, cards, loading, verso } = this.state;
       const { classes } = this.props
 
     return (
       <AuthUserContext.Consumer>
         {authUser => (
           <div>
-            {!loading && messages && (
+            {!loading && cards && (
           <Button variant="contained" color="primary" onClick={this.onNextPage} className={classes.button}>More</Button>
             )}
 
             {loading && <div>Loading ...</div>}
 
-            {messages && (
-              <MessageList
-                messages={messages.map(message => ({
-                  ...message,
+            {cards && (
+              <CardList
+                cards={cards.map(card => ({
+                  ...card,
                   user: users
-                    ? users[message.userId]
-                    : { userId: message.userId },
+                    ? users[card.userId]
+                    : { userId: card.userId },
                 }))}
-                onEditMessage={this.onEditMessage}
-                onRemoveMessage={this.onRemoveMessage}
+                onEditCard={this.onEditCard}
+                onRemoveCard={this.onRemoveCard}
               />
             )}
 
-            {!messages && <div>There are no messages ...</div>}
-			 <form className={classes.form} onSubmit={event =>this.onCreateMessage(event, authUser)}>
+            {!cards && <div>There are no cards ...</div>}
+			 <form className={classes.form} onSubmit={event =>this.onCreateCard(event, authUser)}>
 			  <FormControl margin="normal" required fullWidth>
-				<InputLabel htmlFor="text">Message</InputLabel>
-				<Input type="text" id="text" onChange={this.onChangeText} autoFocus value={text} />
+				<InputLabel htmlFor="recto">Recto</InputLabel>
+				<Input type="text" id="recto" onChange={this.onChangeText} autoFocus value={recto} />
+			  </FormControl>
+			  <FormControl margin="normal" required fullWidth>
+				<InputLabel htmlFor="verso">Verso</InputLabel>
+				<Input type="text" id="verso" onChange={this.onChangeText} autoFocus value={verso} />
 			  </FormControl>
 			  <Button
 				type="submit"
@@ -171,9 +178,9 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
   },
 });
-const Messages = compose(
+const Cards = compose(
   withFirebase,
   withStyles(styles)
-)(MessagesBase);
+)(CardsBase);
 
-export default withFirebase(Messages);
+export default withFirebase(Cards);
