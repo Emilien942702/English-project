@@ -11,6 +11,23 @@ This repository contains the source code of the React application running using 
 ## Installation
 
 - Install [Node.js](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions-enterprise-linux-fedora-and-snap-packages)
+- `firebase login` 
+- Create a .env file at the root of the project, containing the following lines: 
+
+`REACT_APP_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
+
+`REACT_APP_AUTH_DOMAIN=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
+
+`REACT_APP_DATABASE_URL=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
+
+`REACT_APP_PROJECT_ID=XXXXXXXXXXXXXXXXXX`
+
+`REACT_APP_STORAGE_BUCKET=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
+
+`REACT_APP_MESSAGING_SENDER_ID=XXXXXXXXXXX`
+
+To obtain the keys, go [there](https://console.firebase.google.com/u/0/project/test-anglais-6c622/settings/general/) and click on the `</>` symbol to add a web application to the project
+
 - `git clone https://github.com/Emilien942702/English-project && cd English-project`
 - `npm install`
 - `npm start`
