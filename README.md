@@ -21,6 +21,7 @@ The technologies used are :
 - [Material-UI](https://material-ui.com/ "Material-UI") : React UI framework designed to implement Google's Material rules 
 - [Recompose](https://github.com/acdlite/recompose "Recompose") to compose React libraries
 - [Firebase](https://www.npmjs.com/package/firebase "Firebase") to connect the React application to Firebase
+- [github-pages](https://pages.github.com/) for the documentation
 
 ## Hosting
 The application is hosted on [Firebase](https://console.firebase.google.com/u/0/project/test-anglais-6c622/ "Firebase")
