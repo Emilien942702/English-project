@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel'
 import Card from '@material-ui/core/Card';
@@ -86,7 +87,7 @@ class CardItemBase extends Component {
 				</Fade>
 			  </CardContent>
 			  <CardActions>        
-				<Switch checked={checked} onChange={this.handleChange} aria-label="See answer" />
+			    <FormControlLabel control={<Switch checked={checked} onChange={this.handleChange}/>} label="Show answer" />
 			  </CardActions>
 			</Card>
         )}
