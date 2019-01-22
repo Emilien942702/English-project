@@ -13,19 +13,19 @@ The technologies used are :
 - [Recompose](https://github.com/acdlite/recompose "Recompose") to compose React libraries
 - [Firebase](https://www.npmjs.com/package/firebase "Firebase") to connect the React application to Firebase
 
-##Hosting
+## Hosting
 The application is hosted on [Firebase](https://console.firebase.google.com/u/0/project/test-anglais-6c622/ "Firebase")
 
-##Continuous Integration
+## Continuous Integration
 Deployments on Firebase are made from this repository using [Travis](https://travis-ci.org/Emilien942702/English-project "Travis")
 
-##Authentification
+## Authentification
 The application uses [Firebase authentification](https://firebase.google.com/docs/auth/ "Firebase authentification") to register an user using the following characteristics:
 - Username
 - Email Address
 - Password
 
-##Database
+## Database
 The Realtime Database stores the following tables :
 - users
 	- id : given by Firebase authentification (cf. [Authentification](#Authentification)) 
@@ -43,7 +43,7 @@ The Realtime Database stores the following tables :
 		 - userId : ID of the user who created the card
 		 - verso : Text to store the verso of the card
 
-##Deployment 
+## Deployment 
 Just make a commit to the repository, travis will do the rest !
 ## Available Scripts
 
