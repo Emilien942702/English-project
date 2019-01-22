@@ -12,7 +12,7 @@ This repository contains the source code of the React application running using 
 
 - Install [Node.js](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions-enterprise-linux-fedora-and-snap-packages)
 - `firebase login` 
-- Create a .env file at the root of the project, containing the following lines: 
+- Create a `.env` file at the root of the project, containing the following lines: 
 
 `REACT_APP_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
 
