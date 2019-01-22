@@ -43,16 +43,19 @@ The Realtime Database stores the following tables :
 		 - userId : ID of the user who created the card
 		 - verso : Text to store the verso of the card
 
+##Deployment 
+Just make a commit to the repository, travis will do the rest !
 ## Available Scripts
 
 In the project directory, you can run:
 
 ### `npm run start`
 
-Runs the app in the development mode.<br>
+- Runs the app in the development mode.
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
+The page will reload if you make edits.
 You will also see any lint errors in the console.
 
-
+### `npm run build && firebase deploy`
+- Creates the production build and deploy it to firebase.
+Requires to be logged in to Firebase : `firebase login`
