@@ -6,6 +6,13 @@ Repository containing the code source of [test-anglais-6c622.firebaseapp.com](ht
 
 This repository contains the source code of the React application running using Firebase
 
+## Installation
+
+- Install [Node.js](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions-enterprise-linux-fedora-and-snap-packages)
+- `git clone https://github.com/Emilien942702/English-project && cd English-project`
+- `npm install`
+- `npm start`
+
 ## Code
 The technologies used are :
 - [React](https://github.com/facebook/react "React") : Javascript library made by Facebook
