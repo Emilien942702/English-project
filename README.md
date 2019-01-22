@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/Emilien942702/English-project.svg?branch=master)](https://travis-ci.org/Emilien942702/English-project)
+
 # English-project
 
 Repository containing the code source of [test-anglais-6c622.firebaseapp.com](https://test-anglais-6c622.firebaseapp.com/)
