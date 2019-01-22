@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
+import InputLabel from '@material-ui/core/InputLabel'
+import Card from '@material-ui/core/Card';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Switch from '@material-ui/core/Switch';
+import Fade from '@material-ui/core/Fade';
+import GridListTile from '@material-ui/core/GridListTile';
 
 class CardItemBase extends Component {
   constructor(props) {
@@ -13,6 +24,7 @@ class CardItemBase extends Component {
       editMode: false,
       editTextRecto: this.props.card.recto,
       editTextVerso: this.props.card.verso,
+	  checked: false,
     };
   }
 
@@ -33,86 +45,90 @@ class CardItemBase extends Component {
 
     this.setState({ editMode: false });
   };
+  
+  handleChange = () => {
+    this.setState(state => ({ checked: !state.checked }));
+  };
 
   render() {
     const { card, onRemoveCard } = this.props;
-    const { editMode, editTextRecto, editTextVerso } = this.state;
+    const { editMode, editTextRecto, editTextVerso, checked } = this.state;
       const { classes } = this.props
 
     return (
-      <li>
+        <GridListTile >
         {editMode ? (
-		<div>
-		<FormControl margin="normal" required fullWidth>
-				<InputLabel htmlFor="editTextRecto">Recto</InputLabel>
-				<Input type="text" id="editTextRecto" onChange={this.onChangeEditText} autoFocus value={editTextRecto} />
-		</FormControl>
-		<FormControl margin="normal" required fullWidth>
-				<InputLabel htmlFor="editTextVerso">Verso</InputLabel>
-				<Input type="text" id="editTextVerso" onChange={this.onChangeEditText} autoFocus value={editTextVerso} />
-		</FormControl>  
-		</div>
+		<Card className={classes.card}>
+			  <CardContent>
+				<FormControl margin="normal" required fullWidth>
+					<InputLabel htmlFor="editTextRecto">Recto</InputLabel>
+					<Input type="text" id="editTextRecto" onChange={this.onChangeEditText} autoFocus value={editTextRecto} />
+				</FormControl>
+				<FormControl margin="normal" required fullWidth>
+						<InputLabel htmlFor="editTextVerso">Verso</InputLabel>
+						<Input type="text" id="editTextVerso" onChange={this.onChangeEditText} autoFocus value={editTextVerso} />
+				</FormControl>  
+			  </CardContent>
+			</Card>
         ) : (
-          <span>
-            <strong>
-              {card.user.username || card.user.userId}
-            </strong>{' '}
-            {"Recto : "+card.recto} {" Verso : "+card.verso} {card.editedAt && <span>(Edited)</span>}
-          </span>
+			<Card className={classes.card}>
+			  <CardContent>
+				<Typography className={classes.title} color="textSecondary" gutterBottom>
+				  {card.user.username || card.user.userId} {card.editedAt && <span>(Edited)</span>}
+				</Typography>
+				<Typography variant="h5" component="h2">
+				 {card.recto}
+				</Typography>
+				<Fade in={checked}>
+				  <Typography variant="h5" component="h2">
+					{card.verso}
+				  </Typography>
+				</Fade>
+			  </CardContent>
+			  <CardActions>        
+				<Switch checked={checked} onChange={this.handleChange} aria-label="See answer" />
+			  </CardActions>
+			</Card>
         )}
 
         {editMode ? (
           <span>
-            <Button variant="contained" color="primary" onClick={this.onSaveEditText} className={classes.button}>Save</Button>
-            <Button variant="contained" color="primary" onClick={this.onToggleEditMode} className={classes.button}>Reset</Button>
+            <IconButton variant="contained" color="primary" onClick={this.onSaveEditText} className={classes.button}><SaveIcon/></IconButton>
+            <IconButton variant="contained" color="primary" onClick={this.onToggleEditMode} className={classes.button}><CancelIcon/></IconButton>
           </span>
         ) : (
-          <Button variant="contained" color="primary" onClick={this.onToggleEditMode} className={classes.button}>Edit</Button>
+          <IconButton variant="contained" color="primary" onClick={this.onToggleEditMode} className={classes.button}><EditIcon/></IconButton>
         )}
 
         {!editMode && (
-          <Button
-			variant="contained" color="primary"
+          <IconButton
+			variant="contained" color="secondary"
             type="button"
             onClick={() => onRemoveCard(card.uid)}
           className={classes.button}>
-            Delete
-          </Button>
+            <DeleteIcon/>
+          </IconButton>
         )}
-      </li>
+        </GridListTile >
     );
   }
 }
-const styles = theme => ({
-  main: {
-    width: 'auto',
-    display: 'block', // Fix IE 11 issue.
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3,
-    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
-      width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
+const styles = {
+  card: {
+    minWidth: 275,
+	marginRight: 12,
   },
-  paper: {
-    marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
   },
-  avatar: {
-    margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main,
+  title: {
+    fontSize: 14,
   },
-  form: {
-    width: '20%', // Fix IE 11 issue.
-    marginTop: theme.spacing.unit,
+  pos: {
+    marginBottom: 12,
   },
-  submit: {
-    marginTop: theme.spacing.unit * 3,
-  },
-});
+};
 const CardItem = withStyles(styles)(CardItemBase);
 export default CardItem;

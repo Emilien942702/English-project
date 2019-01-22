@@ -8,6 +8,11 @@ import { compose } from 'recompose';
 import FormControl from '@material-ui/core/FormControl';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
+import CardContent from '@material-ui/core/CardContent';
+import AddIcon from '@material-ui/icons/Add';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
 
 class CardsBase extends Component {
   constructor(props) {
@@ -122,25 +127,33 @@ class CardsBase extends Component {
             )}
 
             {!cards && <div>There are no cards ...</div>}
-			 <form className={classes.form} onSubmit={event =>this.onCreateCard(event, authUser)}>
-			  <FormControl margin="normal" required fullWidth>
-				<InputLabel htmlFor="recto">Recto</InputLabel>
-				<Input type="text" id="recto" onChange={this.onChangeText} autoFocus value={recto} />
-			  </FormControl>
-			  <FormControl margin="normal" required fullWidth>
-				<InputLabel htmlFor="verso">Verso</InputLabel>
-				<Input type="text" id="verso" onChange={this.onChangeText} autoFocus value={verso} />
-			  </FormControl>
-			  <Button
-				type="submit"
-				fullWidth
-				variant="contained"
-				color="primary"
-				className={classes.submit}
-			  >
-				Send
-			  </Button>
+			  <Card className={classes.card}>
+			  <CardContent>
+				<Typography className={classes.title} color="textSecondary" gutterBottom>
+				  Add Card
+				</Typography>
+				<form className={classes.form} onSubmit={event =>this.onCreateCard(event, authUser)}>
+				  <FormControl margin="normal" required fullWidth>
+					<InputLabel htmlFor="recto">Recto</InputLabel>
+					<Input type="text" id="recto" onChange={this.onChangeText} autoFocus value={recto} />
+				  </FormControl>
+				  <FormControl margin="normal" required fullWidth>
+					<InputLabel htmlFor="verso">Verso</InputLabel>
+					<Input type="text" id="verso" onChange={this.onChangeText} value={verso} />
+				  </FormControl> 
+				  <IconButton
+					style={{ width: '100%', textAlign: 'right' }}
+					type="submit"
+					fullWidth
+					variant="contained"
+					color="primary"
+					className={classes.submit}
+				  >
+					<AddIcon/>
+				  </IconButton>
 			</form>
+			  </CardContent>
+			</Card>
           </div>
         )}
       </AuthUserContext.Consumer>
@@ -171,11 +184,27 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '20%', // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing.unit,
   },
   submit: {
     marginTop: theme.spacing.unit * 3,
+  },
+  card: {
+    minWidth: 275,
+	width: '20%',
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+	marginRight: 12,
   },
 });
 const Cards = compose(

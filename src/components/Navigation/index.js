@@ -77,7 +77,9 @@ class NavigationAuthBase extends React.Component {
         <BottomNavigationAction label="Home" component={Link} to={ROUTES.HOME} />
         <BottomNavigationAction label="Account" component={Link} to={ROUTES.ACCOUNT} />
 		{authUser.roles.includes(ROLES.ADMIN) && (
+		
         <BottomNavigationAction label="Admin" component={Link} to={ROUTES.ADMIN} />
+		
 		)}
 
 		<SignOutButton />

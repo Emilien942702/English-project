@@ -1,13 +1,14 @@
 import React from 'react';
 
 import CardItem from './CardItem';
+import GridList from '@material-ui/core/GridList';
 
 const CardList = ({
   cards,
   onEditCard,
   onRemoveCard,
 }) => (
-  <ul>
+<GridList component="nav">
     {cards.map(card => (
       <CardItem
         key={card.uid}
@@ -16,7 +17,6 @@ const CardList = ({
         onRemoveCard={onRemoveCard}
       />
     ))}
-  </ul>
+</GridList>
 );
-
 export default CardList;
