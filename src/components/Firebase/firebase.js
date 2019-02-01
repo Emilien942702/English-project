@@ -1,6 +1,6 @@
-import app from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/database';
+import app from "firebase/app";
+import "firebase/auth";
+import "firebase/database";
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -8,7 +8,7 @@ const config = {
   databaseURL: process.env.REACT_APP_DATABASE_URL,
   projectId: process.env.REACT_APP_PROJECT_ID,
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
 };
 
 class Firebase {
@@ -17,7 +17,7 @@ class Firebase {
 
     this.auth = app.auth();
     this.db = app.database();
-	this.serverValue = app.database.ServerValue;
+    this.serverValue = app.database.ServerValue;
   }
 
   // *** Auth API ***
@@ -34,8 +34,7 @@ class Firebase {
   doEmailUpdate = email => this.auth.currentUser.updateEmail(email);
   doDeleteUser = () => this.auth.currentUser.delete();
 
-  doPasswordUpdate = password =>
-    this.auth.currentUser.updatePassword(password);
+  doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
 
   // *** Merge Auth and DB User API *** //
 
@@ -43,7 +42,7 @@ class Firebase {
     this.auth.onAuthStateChanged(authUser => {
       if (authUser) {
         this.user(authUser.uid)
-          .once('value')
+          .once("value")
           .then(snapshot => {
             const dbUser = snapshot.val();
 
@@ -56,7 +55,7 @@ class Firebase {
             authUser = {
               uid: authUser.uid,
               email: authUser.email,
-              ...dbUser,
+              ...dbUser
             };
 
             next(authUser);
@@ -70,11 +69,11 @@ class Firebase {
 
   user = uid => this.db.ref(`users/${uid}`);
 
-  users = () => this.db.ref('users');
-  
+  users = () => this.db.ref("users");
+
   card = uid => this.db.ref(`cards/${uid}`);
 
-  cards = () => this.db.ref('cards');
+  cards = () => this.db.ref("cards");
 }
 
 export default Firebase;

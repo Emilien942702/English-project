@@ -1,29 +1,29 @@
-import React, { Component } from 'react';
-import { AuthUserContext } from '../Session';
-import { withFirebase } from '../Firebase';
-import CardList from './CardList';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from '@material-ui/core/Button';
-import { compose } from 'recompose';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import CardContent from '@material-ui/core/CardContent';
-import AddIcon from '@material-ui/icons/Add';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import Card from '@material-ui/core/Card';
+import React, { Component } from "react";
+import { AuthUserContext } from "../Session";
+import { withFirebase } from "../Firebase";
+import CardList from "./CardList";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Button from "@material-ui/core/Button";
+import { compose } from "recompose";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import CardContent from "@material-ui/core/CardContent";
+import AddIcon from "@material-ui/icons/Add";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import Card from "@material-ui/core/Card";
 
 class CardsBase extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-	  recto: '',
-	  verso: '',
+      recto: "",
+      verso: "",
       loading: false,
       cards: [],
-      limit: 5,
+      limit: 5
     };
   }
 
@@ -36,20 +36,20 @@ class CardsBase extends Component {
 
     this.props.firebase
       .cards()
-      .orderByChild('createdAt')
+      .orderByChild("createdAt")
       .limitToLast(this.state.limit)
-      .on('value', snapshot => {
+      .on("value", snapshot => {
         const cardObject = snapshot.val();
 
         if (cardObject) {
           const cardList = Object.keys(cardObject).map(key => ({
             ...cardObject[key],
-            uid: key,
+            uid: key
           }));
 
           this.setState({
             cards: cardList,
-            loading: false,
+            loading: false
           });
         } else {
           this.setState({ cards: null, loading: false });
@@ -67,13 +67,13 @@ class CardsBase extends Component {
 
   onCreateCard = (event, authUser) => {
     this.props.firebase.cards().push({
-	  recto: this.state.recto,
-	  verso: this.state.verso,
+      recto: this.state.recto,
+      verso: this.state.verso,
       userId: authUser.uid,
-      createdAt: this.props.firebase.serverValue.TIMESTAMP,
+      createdAt: this.props.firebase.serverValue.TIMESTAMP
     });
 
-    this.setState({ recto: '', verso: '' });
+    this.setState({ recto: "", verso: "" });
 
     event.preventDefault();
   };
@@ -81,9 +81,9 @@ class CardsBase extends Component {
   onEditCard = (card, recto, verso) => {
     this.props.firebase.card(card.uid).set({
       ...card,
-	  recto,
-	  verso,
-      editedAt: this.props.firebase.serverValue.TIMESTAMP,
+      recto,
+      verso,
+      editedAt: this.props.firebase.serverValue.TIMESTAMP
     });
   };
 
@@ -92,23 +92,27 @@ class CardsBase extends Component {
   };
 
   onNextPage = () => {
-    this.setState(
-      state => ({ limit: state.limit + 5 }),
-      this.onListenForCards,
-    );
+    this.setState(state => ({ limit: state.limit + 5 }), this.onListenForCards);
   };
 
   render() {
     const { users } = this.props;
     const { recto, cards, loading, verso } = this.state;
-      const { classes } = this.props
+    const { classes } = this.props;
 
     return (
       <AuthUserContext.Consumer>
         {authUser => (
           <div>
             {!loading && cards && (
-          <Button variant="contained" color="primary" onClick={this.onNextPage} className={classes.button}>More</Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={this.onNextPage}
+                className={classes.button}
+              >
+                More
+              </Button>
             )}
 
             {loading && <div>Loading ...</div>}
@@ -117,9 +121,7 @@ class CardsBase extends Component {
               <CardList
                 cards={cards.map(card => ({
                   ...card,
-                  user: users
-                    ? users[card.userId]
-                    : { userId: card.userId },
+                  user: users ? users[card.userId] : { userId: card.userId }
                 }))}
                 onEditCard={this.onEditCard}
                 onRemoveCard={this.onRemoveCard}
@@ -127,33 +129,51 @@ class CardsBase extends Component {
             )}
 
             {!cards && <div>There are no cards ...</div>}
-			  <Card className={classes.card}>
-			  <CardContent>
-				<Typography className={classes.title} color="textSecondary" gutterBottom>
-				  Add Card
-				</Typography>
-				<form className={classes.form} onSubmit={event =>this.onCreateCard(event, authUser)}>
-				  <FormControl margin="normal" required fullWidth>
-					<InputLabel htmlFor="recto">Recto</InputLabel>
-					<Input type="text" id="recto" onChange={this.onChangeText} autoFocus value={recto} />
-				  </FormControl>
-				  <FormControl margin="normal" required fullWidth>
-					<InputLabel htmlFor="verso">Verso</InputLabel>
-					<Input type="text" id="verso" onChange={this.onChangeText} value={verso} />
-				  </FormControl> 
-				  <IconButton
-					style={{ width: '100%', textAlign: 'right' }}
-					type="submit"
-					fullWidth
-					variant="contained"
-					color="primary"
-					className={classes.submit}
-				  >
-					<AddIcon/>
-				  </IconButton>
-			</form>
-			  </CardContent>
-			</Card>
+            <Card className={classes.card}>
+              <CardContent>
+                <Typography
+                  className={classes.title}
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  Add Card
+                </Typography>
+                <form
+                  className={classes.form}
+                  onSubmit={event => this.onCreateCard(event, authUser)}
+                >
+                  <FormControl margin="normal" required fullWidth>
+                    <InputLabel htmlFor="recto">Recto</InputLabel>
+                    <Input
+                      type="text"
+                      id="recto"
+                      onChange={this.onChangeText}
+                      autoFocus
+                      value={recto}
+                    />
+                  </FormControl>
+                  <FormControl margin="normal" required fullWidth>
+                    <InputLabel htmlFor="verso">Verso</InputLabel>
+                    <Input
+                      type="text"
+                      id="verso"
+                      onChange={this.onChangeText}
+                      value={verso}
+                    />
+                  </FormControl>
+                  <IconButton
+                    style={{ width: "100%", textAlign: "right" }}
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         )}
       </AuthUserContext.Consumer>
@@ -162,50 +182,51 @@ class CardsBase extends Component {
 }
 const styles = theme => ({
   main: {
-    width: 'auto',
-    display: 'block', // Fix IE 11 issue.
+    width: "auto",
+    display: "block", // Fix IE 11 issue.
     marginLeft: theme.spacing.unit * 3,
     marginRight: theme.spacing.unit * 3,
     [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
       width: 400,
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
+      marginLeft: "auto",
+      marginRight: "auto"
+    }
   },
   paper: {
     marginTop: theme.spacing.unit * 8,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
+      .spacing.unit * 3}px`
   },
   avatar: {
     margin: theme.spacing.unit,
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.secondary.main
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing.unit,
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing.unit
   },
   submit: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit * 3
   },
   card: {
     minWidth: 275,
-	width: '20%',
+    width: "20%"
   },
   bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)"
   },
   title: {
-    fontSize: 14,
+    fontSize: 14
   },
   pos: {
     marginBottom: 12,
-	marginRight: 12,
-  },
+    marginRight: 12
+  }
 });
 const Cards = compose(
   withFirebase,

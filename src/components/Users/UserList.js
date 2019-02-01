@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
-import { withFirebase } from '../Firebase';
-import * as ROUTES from '../../constants/routes';
+import { withFirebase } from "../Firebase";
+import * as ROUTES from "../../constants/routes";
 
 class UserList extends Component {
   constructor(props) {
@@ -10,24 +10,24 @@ class UserList extends Component {
 
     this.state = {
       loading: false,
-      users: [],
+      users: []
     };
   }
 
   componentDidMount() {
     this.setState({ loading: true });
 
-    this.props.firebase.users().on('value', snapshot => {
+    this.props.firebase.users().on("value", snapshot => {
       const usersObject = snapshot.val();
 
       const usersList = Object.keys(usersObject).map(key => ({
         ...usersObject[key],
-        uid: key,
+        uid: key
       }));
 
       this.setState({
         users: usersList,
-        loading: false,
+        loading: false
       });
     });
   }
@@ -47,22 +47,23 @@ class UserList extends Component {
           {users.map(user => (
             <li key={user.uid}>
               <span>
-                <strong>ID:</strong> {user.uid+" "}
+                <strong>ID:</strong> {user.uid + " "}
               </span>
               <span>
-                <strong>E-Mail:</strong> {user.email+" "}
+                <strong>E-Mail:</strong> {user.email + " "}
               </span>
               <span>
-                <strong>Username:</strong> {user.username+" "}
+                <strong>Username:</strong> {user.username + " "}
               </span>
-			  <span>
-			    <strong>Admin:</strong> {user.roles===undefined ? "false " : "true "}
-			  </span>
+              <span>
+                <strong>Admin:</strong>{" "}
+                {user.roles === undefined ? "false " : "true "}
+              </span>
               <span>
                 <Link
                   to={{
                     pathname: `${ROUTES.ADMIN}/${user.uid}`,
-                    state: { user },
+                    state: { user }
                   }}
                 >
                   Actions
