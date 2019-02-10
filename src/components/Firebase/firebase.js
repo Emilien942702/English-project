@@ -74,6 +74,10 @@ class Firebase {
   card = uid => this.db.ref(`cards/${uid}`);
 
   cards = () => this.db.ref("cards");
+
+  deck = uid => this.db.ref(`decks/${uid}`);
+
+  decks = () => this.db.ref("decks");
 }
 
 export default Firebase;

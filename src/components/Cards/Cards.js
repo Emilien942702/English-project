@@ -233,4 +233,4 @@ const Cards = compose(
   withStyles(styles)
 )(CardsBase);
 
-export default withFirebase(Cards);
+export default Cards;

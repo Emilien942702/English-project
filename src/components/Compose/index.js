@@ -7,7 +7,7 @@ import Tab from "@material-ui/core/Tab";
 import { withAuthorization } from "../Session";
 import { withFirebase } from "../Firebase";
 import Cards from "../Cards";
-import { Typography } from "@material-ui/core";
+import Decks from "../Decks";
 
 class ListCards extends Component {
   constructor(props) {
@@ -44,7 +44,7 @@ class ListCards extends Component {
           <Tab label="Decks" />
         </Tabs>
         {value === 0 && <Cards users={this.state.users} />}
-        {value === 1 && <Typography>Salut</Typography>}
+        {value === 1 && <Decks users={this.state.users} />}
       </Paper>
     );
   }
