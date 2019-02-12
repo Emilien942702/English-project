@@ -3,7 +3,6 @@ import { AuthUserContext } from "../Session";
 import { withFirebase } from "../Firebase";
 import DeckList from "./DeckList";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Button from "@material-ui/core/Button";
 import { compose } from "recompose";
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
@@ -26,8 +25,7 @@ class DecksBase extends Component {
       cartes: [],
       loading: false,
       decks: [],
-      cartesDispo: [],
-      limit: 5
+      cartesDispo: []
     };
   }
   
@@ -41,7 +39,6 @@ class DecksBase extends Component {
     this.props.firebase
       .decks()
       .orderByChild("createdAt")
-      .limitToLast(this.state.limit)
       .on("value", snapshot => {
         const deckObject = snapshot.val();
 
@@ -116,10 +113,6 @@ class DecksBase extends Component {
     this.props.firebase.deck(uid).remove();
   };
 
-  onNextPage = () => {
-    this.setState(state => ({ limit: state.limit + 5 }), this.onListenForDecks);
-  };
-
   handleChangeCarte = event => {
     this.setState({ cartes: event.target.value });
   };
@@ -144,16 +137,6 @@ class DecksBase extends Component {
       <AuthUserContext.Consumer>
         {authUser => (
           <div>
-            {!loading && decks && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={this.onNextPage}
-                className={classes.button}
-              >
-                More
-              </Button>
-            )}
 
             {loading && <div>Loading ...</div>}
 
@@ -275,7 +258,7 @@ const styles = theme => ({
   },
   deck: {
     minWidth: 275,
-    width: "100%"
+    width: "20%"
   },
   bullet: {
     display: "inline-block",

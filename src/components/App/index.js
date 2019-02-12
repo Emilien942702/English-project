@@ -9,6 +9,7 @@ import PasswordForgetPage from "../PasswordForget";
 import ListCards from "../Compose";
 import AccountPage from "../Account";
 import AdminPage from "../Admin";
+import Train from "../Train";
 
 import * as ROUTES from "../../constants/routes";
 import { withAuthentication } from "../Session";
@@ -25,6 +26,7 @@ const App = () => (
       <Route path={ROUTES.SIGN_IN} component={SignInPage} />
       <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
       <Route path={ROUTES.COMPOSE} component={ListCards} />
+      <Route path={ROUTES.TRAIN} component={Train} />
       <Route path={ROUTES.ACCOUNT} component={AccountPage} />
       <Route path={ROUTES.ADMIN} component={AdminPage} />
     </div>

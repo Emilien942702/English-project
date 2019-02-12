@@ -89,6 +89,11 @@ class NavigationAuthBase extends React.Component {
           to={ROUTES.COMPOSE}
         />
         <BottomNavigationAction
+          label="Train"
+          component={Link}
+          to={ROUTES.TRAIN}
+        />
+        <BottomNavigationAction
           label="Account"
           component={Link}
           to={ROUTES.ACCOUNT}
