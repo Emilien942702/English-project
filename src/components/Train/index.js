@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { WORST, BEST, calculate, getPercentOverdue } from 'sm2-plus';
+import { calculate, getPercentOverdue } from 'sm2-plus';
 
 class TrainBase extends Component {
   render() {
