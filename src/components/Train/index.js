@@ -2,24 +2,39 @@ import React, { Component } from "react";
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import withStyles from "@material-ui/core/styles/withStyles";
-import  MS from 'memory-scheduler';
+import { WORST, BEST, calculate, getPercentOverdue } from 'sm2-plus';
 
 class TrainBase extends Component {
   render() {
     const DAY_IN_MINISECONDS = 24 * 60 * 60 * 1000;
+    const getDaysSinceEpoch = () => (
+        Math.round(new Date().getTime() / DAY_IN_MINISECONDS)
+    );
 
-  const today = Math.round(new Date().getTime() / DAY_IN_MINISECONDS);
+    const TODAY = getDaysSinceEpoch();
 
-  const yesterday = today-1;
-
-  const ms = new MS([1, 2, 3, 8, 17], [-3, -1, 1]);
-
-  const record = ms.getInitialRecord(yesterday);
-  const updatedRecord = ms.calculate( 4, record, today);
+    const testWord = {
+      word: 'test',
+      update: TODAY - 17,    
+      difficulty: 0.2,
+      interval: 100
+    };
+    const {difficulty,interval,dueDate,update,word} = calculate(testWord, 1, TODAY);
+    const testWordUpdated = {
+      word: 'test',
+      update: update,    
+      difficulty: difficulty,
+      interval: interval
+    };
+    const percent = getPercentOverdue(testWordUpdated,TODAY);
     return(
     <div>
-      <h1>{updatedRecord.progress}</h1>
-      <h1>{updatedRecord.dueDate.toString()}</h1>
+      <h1>{difficulty}</h1>
+      <h1>{interval}</h1>
+      <h1>{dueDate}</h1>
+      <h1>{update}</h1>
+      <h1>{word}</h1>
+      <h1>{percent}</h1>
     </div>
     );
   }
